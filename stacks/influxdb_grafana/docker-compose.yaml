@@ -1,0 +1,37 @@
+# https://www.blackvoid.club/grafana-8-influxdb-2-telegraf-2021-monitoring-stack/
+# https://www.influxdata.com/blog/running-influxdb-2-0-and-telegraf-using-docker/
+
+version: '3.7'
+
+networks:
+  iot-net:
+    name: iot-net
+
+volumes:
+  influxdb2-data:
+    name: influxdb2-data
+  influxdb2-config:
+    name: influxdb2-config
+
+services:
+  influxdb2:
+    image: amd64/influxdb:latest
+    container_name: influxdb2
+    restart: unless-stopped
+#    ports:
+#      - "8086:8086"
+    volumes:
+      - influxdb2-data:/var/lib/influxdb2
+      - influxdb2-config:/etc/influxdb2
+    networks:
+      iot-net:
+        aliases:
+          - influxdb2
+    environment:
+      - DOCKER_INFLUXDB_INIT_MODE=setup
+      - DOCKER_INFLUXDB_INIT_USERNAME=hoerner
+      - DOCKER_INFLUXDB_INIT_PASSWORD=JprVomwrwKTK
+      - DOCKER_INFLUXDB_INIT_ORG=WeingutHoerner
+      - DOCKER_INFLUXDB_INIT_BUCKET=HoernerDatalog
+#      - DOCKER_INFLUXDB_INIT_RETENTION=1w
+#      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=randomTokenValue

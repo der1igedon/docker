@@ -1,0 +1,22 @@
+# https://www.blackvoid.club/grafana-8-influxdb-2-telegraf-2021-monitoring-stack/
+# https://www.influxdata.com/blog/running-influxdb-2-0-and-telegraf-using-docker/
+
+version: '3.7'
+
+volumes:
+  portainer-data:
+    name: portainer-data
+
+services:
+  portainer:
+    image: portainer/portainer:latest
+    container_name: portainer
+    command: -H unix:///var/run/docker.sock
+    restart: always
+    ports:
+      - 9000:9000
+      - 8000:8000
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer-data:/data
+

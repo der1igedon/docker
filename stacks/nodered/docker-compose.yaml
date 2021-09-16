@@ -1,0 +1,28 @@
+# https://www.blackvoid.club/grafana-8-influxdb-2-telegraf-2021-monitoring-stack/
+# https://www.influxdata.com/blog/running-influxdb-2-0-and-telegraf-using-docker/
+
+version: '3.7'
+
+networks:
+  zigbee-net:
+    external: true
+
+volumes:
+  nodered-data:
+    name: nodered-data
+
+services:
+  nodered:
+    container_name: nodered
+    restart: unless-stopped
+    image: nodered/node-red:latest
+    environment:
+      - TZ=Europe/Berlin
+    ports:
+      - "1880:1880"
+    networks:
+      zigbee-net:
+        aliases:
+          - nodered
+    volumes:
+      - nodered-data:/data

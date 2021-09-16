@@ -1,0 +1,36 @@
+# https://www.blackvoid.club/grafana-8-influxdb-2-telegraf-2021-monitoring-stack/
+# https://www.influxdata.com/blog/running-influxdb-2-0-and-telegraf-using-docker/
+
+version: '3.7'
+
+networks:
+  zigbee-net:
+    name: zigbee-net
+
+volumes:
+  deconz-data:
+    name: deconz-data
+
+services:
+  deconz:
+    container_name: deconz
+    restart: unless-stopped
+    image: marthoc/deconz
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - deconz-data:/root/.local/share/dresden-elektronik/deCONZ
+    environment:
+      - DECONZ_VNC_PASSWORD=Z8l7#fv!4tz4
+      - DECONZ_VNC_MODE="1"
+      - DECONZ_WEB_PORT="8080"
+      - DECONZ_WS_PORT="8443"
+      - DECONZ_DEVICE="/dev/ttyACM0"
+    devices:
+      - /dev/ttyACM0:/dev/ttyACM0
+    ports:
+      - "8080:8080"
+      - "5900:5900"
+    networks:
+      zigbee-net:
+        aliases:
+          - deconz
